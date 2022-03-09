@@ -7,27 +7,45 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.BDDMockito.given; //para chamarmos o método com apenas given, como fizemos com assertThat
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+@ExtendWith(MockitoExtension.class) // para informarmos que estamos utilizando anotações do Mockito para mockar as dependências.
 public class AlunoServiceTests {
 
+  @Mock
   private AlunoRepository alunoRepository;
-  private AlunoService alunoService;
+
+  @InjectMocks // para criarmos objectos Mock que serão precisarão ser injetados dentro das classes anotadas com @Mock
+  private AlunoServiceImpl alunoService;
+
+  private Aluno aluno; // objeto que será utilizado em todos os testes, configurado em @BeforeEach setup();
+
 
   // criamos o mock no setup()
   @BeforeEach
   public void setup() {
 
     // como utilizamos o método estático mock() para mockar uma interface ou classe.
-    alunoRepository = Mockito.mock(AlunoRepository.class);
+    // alunoRepository = Mockito.mock(AlunoRepository.class); // a anotação @Mock substitui esta linha.
 
     // precisamos alterar o código e criar um construtor em AlunoServiceImpl para podermos
     // trabalhar desta forma.
-    alunoService = new AlunoServiceImpl(alunoRepository);
+    // alunoService = new AlunoServiceImpl(alunoRepository); // a anotação @InjectMocks substitui esta linha
 
+    // configuração do objeto Aluno, utilizado em todos os testes:
+    aluno  = Aluno.builder()
+      .id(1L)
+      .firstName("Julio")
+      .lastName("Mendes")
+      .email("julio@hotmail.com")
+      .build();
   }
 
   // Teste JUnit para método salvarAluno
@@ -37,24 +55,17 @@ public class AlunoServiceTests {
 
     // DADO: pré-condição ou setup
 
-    Aluno aluno  = Aluno.builder()
-      .id(1L)
-      .firstName("Julio")
-      .lastName("Mendes")
-      .email("julio@hotmail.com")
-      .build();
-
     // se observarmos a classe AlunoServiceImpl, vemos que o método salvarAluno utiliza os métodos
     // alunoRepository.findByEmail e alunoRepository.save.
     // precisamos fornecer um stub in para ambos os dois métodos: findByEmail e save.
 
     // findByEmail:
-    BDDMockito.given(alunoRepository.findByEmail(aluno.getEmail()))
+    given(alunoRepository.findByEmail(aluno.getEmail()))
       .willReturn(Optional.empty());
     // qual seja: sempre que chamar findByEmail(aluno.getEmail()), retornar Optional.empty().
 
     // save:
-    BDDMockito.given(alunoRepository.save(aluno))
+    given(alunoRepository.save(aluno))
       .willReturn(aluno);
     // qual seja: quando chamarmos .save, retornamos aluno;
 
