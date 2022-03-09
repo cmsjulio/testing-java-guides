@@ -1,5 +1,6 @@
 package net.javaguides.springboot.service;
 
+import net.javaguides.springboot.exception.ResourceNotFoundException;
 import net.javaguides.springboot.model.Aluno;
 import net.javaguides.springboot.repository.AlunoRepository;
 import net.javaguides.springboot.service.impl.AlunoServiceImpl;
@@ -8,7 +9,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given; //para chamarmos o método com apenas given, como fizemos com assertThat
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -81,6 +87,38 @@ public class AlunoServiceTests {
     System.out.println(alunoSalvo);
     // ENTÃO: verificação das saídas
     Assertions.assertThat(alunoSalvo).isNotNull();
+
+  }
+
+  // Teste JUnit para método salvarAluno
+  @DisplayName("Test JUnit para método salvarAluno com thrown exception")
+  @Test
+  public void dadoObjetoAluno_quandoSalvarAluno_entaoThrowsException() {
+
+    // DADO: pré-condição ou setup
+
+    // findByEmail -- precisa retornar um aluno existente.:
+    given(alunoRepository.findByEmail(aluno.getEmail()))
+      .willReturn(Optional.of(aluno));
+    // qual seja: sempre que chamar findByEmail(aluno.getEmail()), retornar Optional.of(aluno).
+
+    // save:
+    // given(alunoRepository.save(aluno)).willReturn(aluno); // given não utilizado aponta erro: precisa remover.
+    // a exceção evita o chamamento de .save, por isso o given fica inutilizado no caso de existir saída de .findByEmail.
+
+    // para checar se os mocks estão sendo construídos
+    System.out.println(alunoRepository);
+    System.out.println(alunoService);
+
+    // QUANDO: ação ou comportamento a ser testado
+
+    // para lidarmos com exceções nos testes:
+    org.junit.jupiter.api.Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+      alunoService.salvarAluno(aluno);
+    });
+
+    // ENTÃO -- precisamos checar que, após lançar exceção, o mock de alunoRepository não executa o .save(aluno)
+    verify(alunoRepository, never()).save(any(Aluno.class)); // any do ArgumentMatchers
 
   }
 }
