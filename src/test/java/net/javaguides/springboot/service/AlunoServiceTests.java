@@ -4,7 +4,9 @@ import net.javaguides.springboot.exception.ResourceNotFoundException;
 import net.javaguides.springboot.model.Aluno;
 import net.javaguides.springboot.repository.AlunoRepository;
 import net.javaguides.springboot.service.impl.AlunoServiceImpl;
+
 import static org.assertj.core.api.Assertions.assertThat; // pra chamar assertThat diretamente
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -175,20 +177,45 @@ public class AlunoServiceTests {
 
   }
 
-    // Teste JUnit para método obterAlunos()
-      @DisplayName("Teste JUnit para método obterAlunoPorId(id)")
-      @Test
-      public void dadoAlunoId_quandoObterAlunoPorId_entaoRetornarAluno() {
+  // Teste JUnit para método obterAlunos()
+  @DisplayName("Teste JUnit para método obterAlunoPorId(id)")
+  @Test
+  public void dadoAlunoId_quandoObterAlunoPorId_entaoRetornarAluno() {
 
-        // DADO: pré-condição ou setup
-        given(alunoRepository.findById(aluno.getId())).willReturn(Optional.of(aluno));
+    // DADO: pré-condição ou setup
+    given(alunoRepository.findById(aluno.getId())).willReturn(Optional.of(aluno));
 
-        // QUANDO: ação ou comportamento a ser testado
-        Aluno alunoSalvo = alunoService.obterAlunoPorId(aluno.getId()).get(); //.get() porque retorno é opcional
+    // QUANDO: ação ou comportamento a ser testado
+    Aluno alunoSalvo = alunoService.obterAlunoPorId(aluno.getId()).get(); //.get() porque retorno é opcional
 
-        // ENTÃO: verificação das saídas
-        assertThat(alunoSalvo).isNotNull();
+    // ENTÃO: verificação das saídas
+    assertThat(alunoSalvo).isNotNull();
 
-      }
+  }
+
+  // Teste JUnit para método atualizarAluno(Aluno aluno)
+  @DisplayName("Teste JUnit para método atualizarAluno(Aluno aluno)")
+  @Test
+  public void dadoObjetoAluno_quandoAtualizarAluno_entaoRetornarAlunoAtualizado() {
+
+    // DADO: pré-condição ou setup
+
+    //    setup irá rodar, configurando objeto aluno.
+    given(alunoRepository.save(aluno)).willReturn(aluno);
+
+    //    atualizando objeto aluno
+    aluno.setFirstName("Jjj");
+    aluno.setEmail("cms.julio1@gam.com");
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    Aluno alunoAtualizado = alunoService.atualizarAluno(aluno);
+
+
+    // ENTÃO: verificação das saídas - verificar que email e firstName foram alterados;
+    assertThat(alunoAtualizado.getFirstName()).isEqualTo(aluno.getFirstName());
+    assertThat(alunoAtualizado.getEmail()).isEqualTo(aluno.getEmail());
+
+  }
 
 }

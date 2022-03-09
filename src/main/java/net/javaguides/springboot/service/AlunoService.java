@@ -9,4 +9,5 @@ public interface AlunoService {
   Aluno salvarAluno(Aluno aluno);
   List<Aluno> obterAlunos(); // novo método criado na interface
   Optional<Aluno> obterAlunoPorId(Long id); // novo método, para obter aluno por Id.
+  Aluno atualizarAluno(Aluno aluno); // atualizar aluno;
 }

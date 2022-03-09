@@ -74,4 +74,10 @@ public class AlunoServiceImpl implements AlunoService {
   public Optional<Aluno> obterAlunoPorId(Long id) {
     return alunoRepository.findById(id);
   }
+
+  // implementação simples do método atualizarAluno
+  @Override
+  public Aluno atualizarAluno(Aluno alunoAtualizado) {
+    return alunoRepository.save(alunoAtualizado);
+  }
 }
