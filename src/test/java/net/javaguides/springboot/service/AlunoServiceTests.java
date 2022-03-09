@@ -14,8 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given; //para chamarmos o método com apenas given, como fizemos com assertThat
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -216,6 +216,24 @@ public class AlunoServiceTests {
     assertThat(alunoAtualizado.getFirstName()).isEqualTo(aluno.getFirstName());
     assertThat(alunoAtualizado.getEmail()).isEqualTo(aluno.getEmail());
 
+  }
+
+  // Teste JUnit para método deletarAluno(Aluno aluno)
+  @DisplayName("Teste JUnit para método deletarAluno(Long id)")
+  @Test
+  public void dadoObjetoAluno_quandoDeletarAluno_entaoNothing() {
+
+    // DADO: pré-condição ou setup
+    willDoNothing().given(alunoRepository).deleteById(aluno.getId());
+    //    para mockar o retorno VOID
+
+    // QUANDO: ação ou comportamento a ser testado
+    alunoService.deletarAluno(aluno.getId());
+
+
+    // ENTÃO: verificação das saídas
+    //    aqui verificamos quantas vezes o método alunoRepository.deleteById foi chamado.
+    verify(alunoRepository, times(1)).deleteById(aluno.getId());
   }
 
 }

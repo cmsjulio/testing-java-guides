@@ -4,7 +4,6 @@ import net.javaguides.springboot.exception.ResourceNotFoundException;
 import net.javaguides.springboot.model.Aluno;
 import net.javaguides.springboot.repository.AlunoRepository;
 import net.javaguides.springboot.service.AlunoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,5 +78,10 @@ public class AlunoServiceImpl implements AlunoService {
   @Override
   public Aluno atualizarAluno(Aluno alunoAtualizado) {
     return alunoRepository.save(alunoAtualizado);
+  }
+
+  @Override
+  public void deletarAluno(Long id) {
+    alunoRepository.deleteById(id);
   }
 }
