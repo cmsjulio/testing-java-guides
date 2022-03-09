@@ -68,4 +68,10 @@ public class AlunoServiceImpl implements AlunoService {
   public List<Aluno> obterAlunos() {
     return alunoRepository.findAll();
   }
+
+  // implementação do método criado na interface AlunoService
+  @Override
+  public Optional<Aluno> obterAlunoPorId(Long id) {
+    return alunoRepository.findById(id);
+  }
 }

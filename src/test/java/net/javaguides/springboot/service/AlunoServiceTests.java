@@ -4,7 +4,7 @@ import net.javaguides.springboot.exception.ResourceNotFoundException;
 import net.javaguides.springboot.model.Aluno;
 import net.javaguides.springboot.repository.AlunoRepository;
 import net.javaguides.springboot.service.impl.AlunoServiceImpl;
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat; // pra chamar assertThat diretamente
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,7 +89,7 @@ public class AlunoServiceTests {
     //para observar saída do .salvarAluno
     System.out.println(alunoSalvo);
     // ENTÃO: verificação das saídas
-    Assertions.assertThat(alunoSalvo).isNotNull();
+    assertThat(alunoSalvo).isNotNull();
 
   }
 
@@ -145,8 +145,8 @@ public class AlunoServiceTests {
     List<Aluno> listaDeAlunos = alunoService.obterAlunos();
 
     // ENTÃO: verificação das saídas
-    Assertions.assertThat(listaDeAlunos).isNotNull(); //assertions do asserj
-    Assertions.assertThat(listaDeAlunos.size()).isEqualTo(2);
+    assertThat(listaDeAlunos).isNotNull(); //assertions do asserj
+    assertThat(listaDeAlunos.size()).isEqualTo(2);
 
   }
 
@@ -170,9 +170,25 @@ public class AlunoServiceTests {
     List<Aluno> listaDeAlunos = alunoService.obterAlunos();
 
     // ENTÃO: verificação das saídas
-    Assertions.assertThat(listaDeAlunos).isEmpty(); //assertions do asserj
-    Assertions.assertThat(listaDeAlunos.size()).isEqualTo(0);
+    assertThat(listaDeAlunos).isEmpty(); //assertions do asserj
+    assertThat(listaDeAlunos.size()).isEqualTo(0);
 
   }
+
+    // Teste JUnit para método obterAlunos()
+      @DisplayName("Teste JUnit para método obterAlunoPorId(id)")
+      @Test
+      public void dadoAlunoId_quandoObterAlunoPorId_entaoRetornarAluno() {
+
+        // DADO: pré-condição ou setup
+        given(alunoRepository.findById(aluno.getId())).willReturn(Optional.of(aluno));
+
+        // QUANDO: ação ou comportamento a ser testado
+        Aluno alunoSalvo = alunoService.obterAlunoPorId(aluno.getId()).get(); //.get() porque retorno é opcional
+
+        // ENTÃO: verificação das saídas
+        assertThat(alunoSalvo).isNotNull();
+
+      }
 
 }
