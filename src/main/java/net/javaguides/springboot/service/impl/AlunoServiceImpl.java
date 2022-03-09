@@ -12,8 +12,12 @@ import java.util.Optional;
 @Service
 public class AlunoServiceImpl implements AlunoService {
 
-  @Autowired
+  // @Autowired //depois de criado o construtor, o @Autowired torna-se desnecessário.
   private AlunoRepository alunoRepository;
+
+  public AlunoServiceImpl(AlunoRepository alunoRepository) {
+    this.alunoRepository = alunoRepository;
+  }
   // AlunoService utiliza AlunoRepository, para que possamos testar AlunoService impedindo a possibilidade
   //  de erros no AlunoRepository, precisamos utilizar um mock (imitação) do AlunoRepository.
   // O framework mockito é responsável por implementar este mock.
