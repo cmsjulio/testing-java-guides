@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -146,6 +147,31 @@ public class AlunoServiceTests {
     // ENTÃO: verificação das saídas
     Assertions.assertThat(listaDeAlunos).isNotNull(); //assertions do asserj
     Assertions.assertThat(listaDeAlunos.size()).isEqualTo(2);
+
+  }
+
+  // Teste JUnit para método obterAlunos()
+  @DisplayName("Teste JUnit para método obterAlunos() - cenário negativo")
+  @Test
+  public void dadoListaDeAlunosVazia_quandoObterAlunos_entaoRetonarListaDeAlunosVazia() {
+
+    // DADO: pré-condição ou setup
+    Aluno aluno2 = Aluno.builder()
+      .id(2L)
+      .firstName("João")
+      .lastName("Pedro")
+      .email("jp@hotmail.com")
+      .build();
+
+    //precisamos mockar o findAll, pois este é chamado pelo alunoService.obterAlunos()
+    given(alunoRepository.findAll()).willReturn(Collections.emptyList());
+
+    // QUANDO: ação ou comportamento a ser testado
+    List<Aluno> listaDeAlunos = alunoService.obterAlunos();
+
+    // ENTÃO: verificação das saídas
+    Assertions.assertThat(listaDeAlunos).isEmpty(); //assertions do asserj
+    Assertions.assertThat(listaDeAlunos.size()).isEqualTo(0);
 
   }
 
