@@ -7,6 +7,7 @@ import net.javaguides.springboot.service.AlunoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,5 +61,11 @@ public class AlunoServiceImpl implements AlunoService {
     }
 
     return alunoRepository.save(aluno);
+  }
+
+  // implementação do método obterAlunos()
+  @Override
+  public List<Aluno> obterAlunos() {
+    return alunoRepository.findAll();
   }
 }

@@ -20,9 +20,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
-@ExtendWith(MockitoExtension.class) // para informarmos que estamos utilizando anotações do Mockito para mockar as dependências.
+@ExtendWith(MockitoExtension.class)
+// para informarmos que estamos utilizando anotações do Mockito para mockar as dependências.
 public class AlunoServiceTests {
 
   @Mock
@@ -46,7 +48,7 @@ public class AlunoServiceTests {
     // alunoService = new AlunoServiceImpl(alunoRepository); // a anotação @InjectMocks substitui esta linha
 
     // configuração do objeto Aluno, utilizado em todos os testes:
-    aluno  = Aluno.builder()
+    aluno = Aluno.builder()
       .id(1L)
       .firstName("Julio")
       .lastName("Mendes")
@@ -121,4 +123,30 @@ public class AlunoServiceTests {
     verify(alunoRepository, never()).save(any(Aluno.class)); // any do ArgumentMatchers
 
   }
+
+  // Teste JUnit para método obterAlunos()
+  @DisplayName("Teste JUnit para método obterAlunos()")
+  @Test
+  public void dadoListaDeAlunos_quandoObterAlunos_entaoRetonarListaDeAlunos() {
+
+    // DADO: pré-condição ou setup
+    Aluno aluno2 = Aluno.builder()
+      .id(2L)
+      .firstName("João")
+      .lastName("Pedro")
+      .email("jp@hotmail.com")
+      .build();
+
+    //precisamos mockar o findAll, pois este é chamado pelo alunoService.obterAlunos()
+    given(alunoRepository.findAll()).willReturn(List.of(aluno, aluno2));
+
+    // QUANDO: ação ou comportamento a ser testado
+    List<Aluno> listaDeAlunos = alunoService.obterAlunos();
+
+    // ENTÃO: verificação das saídas
+    Assertions.assertThat(listaDeAlunos).isNotNull(); //assertions do asserj
+    Assertions.assertThat(listaDeAlunos.size()).isEqualTo(2);
+
+  }
+
 }
