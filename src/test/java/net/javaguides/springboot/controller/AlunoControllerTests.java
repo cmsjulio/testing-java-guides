@@ -18,6 +18,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @WebMvcTest // carrega apenas os Beans necessários para testar o Controller.
 public class AlunoControllerTests {
 
@@ -35,7 +38,7 @@ public class AlunoControllerTests {
 
   @DisplayName("Controller Unit teste do endpoint criarAluno")
   @Test // pra que o JUnit detecte este método como um caso de teste JUnit.
-  public void dadoObjetoAluno_quandoCriarAluno_entaoRetornarAlunoSalvo() throws Exception{ //exceção do object mapper
+  public void dadoObjetoAluno_quandoCriarAluno_entaoRetornarAlunoSalvo() throws Exception{ //exceção do mockMvc.perform
 
     // DADO - pré-condição ou setup
     Aluno aluno = Aluno.builder()
@@ -69,4 +72,44 @@ public class AlunoControllerTests {
         CoreMatchers.is(aluno.getEmail())));
 
   }
+
+    // Controller Unit teste do endpoint listarAlunos
+      @DisplayName("Controller Unit teste do endpoint listarAlunos")
+      @Test
+      public void dadoObjetosAluno_quandoListarAlunos_entaoRetornarListaDeAlunos() throws Exception{
+
+        // DADO: pré-condição ou setup
+        // inserindo lista de alunos
+        Aluno aluno1 = Aluno.builder()
+          .firstName("Julio")
+          .lastName("Silva")
+          .email("cms.julio1@gmail.com")
+          .build();
+
+        Aluno aluno2 = Aluno.builder()
+          .firstName("Juliana")
+          .lastName("Silva")
+          .email("js@gmail.com")
+          .build();
+
+        List<Aluno> listaDeAlunos = new ArrayList<>();
+        listaDeAlunos.add(aluno1);
+        listaDeAlunos.add(aluno2);
+
+        //stubbing
+        BDDMockito.given(alunoService.obterAlunos()).willReturn(listaDeAlunos);
+
+
+        // QUANDO: ação ou comportamento a ser testado
+        // usando o mockMvc para chamar o endpoint
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/api/alunos"));
+
+
+        // ENTÃO: verificação das saídas
+        response.andDo(MockMvcResultHandlers.print())
+          .andExpect(MockMvcResultMatchers.status().isOk()) //pra verificar se o status do response é OK
+          .andExpect(MockMvcResultMatchers.jsonPath("$.size()",
+            CoreMatchers.is(listaDeAlunos.size()))); //pra verificar se o size do json de saída $.size é igual ao da saída esperada (listaDeAlunos)
+
+      }
 }
