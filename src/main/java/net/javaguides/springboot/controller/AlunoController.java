@@ -61,9 +61,11 @@ package net.javaguides.springboot.controller;
 import net.javaguides.springboot.model.Aluno;
 import net.javaguides.springboot.service.AlunoService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/alunos")
@@ -72,19 +74,26 @@ public class AlunoController {
   private AlunoService alunoService;
 
   // com o construtor, não precisamos do @Autowired
-  public AlunoController(AlunoService alunoService){
+  public AlunoController(AlunoService alunoService) {
     this.alunoService = alunoService;
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED) //por padrão, a resposta é 200, pra alterar, anotamos desta forma.
-  public Aluno criarAluno(@RequestBody Aluno aluno){ //@RequestBody usa métodos internos para converter JSON/obj.
+  public Aluno criarAluno(@RequestBody Aluno aluno) { //@RequestBody usa métodos internos para converter JSON/obj.
     return alunoService.salvarAluno(aluno);
   }
 
   @GetMapping
   public List<Aluno> listarAlunos() {
     return alunoService.obterAlunos();
+  }
+
+  @GetMapping(path = "{id}")
+  public ResponseEntity<Aluno> obterAlunoPorId(@PathVariable("id") Long id) {
+    return alunoService.obterAlunoPorId(id)
+      .map(ResponseEntity::ok) //se existir, retorna ok
+      .orElseGet(() -> ResponseEntity.notFound().build()); // se não existir, retornar notFound
   }
 
 }
