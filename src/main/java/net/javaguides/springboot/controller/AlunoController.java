@@ -40,6 +40,21 @@ package net.javaguides.springboot.controller;
 
       A especificação do teste por componetne torna a aplicação mais rápida.
 
+      --
+
+      @WebMvcTest vs @SpringBootTest
+      A anotação @WebMvcTest é disponibilizada pelo Sprinb Boot, esta cria o contexto da aplicação,
+      configurando apenas os Beans necessários para o teste do Spring MVC Controller.
+      Os Beans do Service e Repository, por exemplo, não são carregados.
+
+      O Spring Boot disponibiliza também a anotação @SpringBootTest, utilizada para testes de integração.
+      Testes de integração envolvem todas as camadas da aplicação: Controller, Service, Repository e DB.
+      A anotação @SprinbBootTest irá, portanto, carregar toda a aplicação: i.d., todos os Beans de todas as camadas.
+
+      Controller Unit Test: @WebMvcTest
+      Integration test:     @SpringBootTest
+
+
 
  */
 
