@@ -235,5 +235,4 @@ public class AlunoServiceTests {
     //    aqui verificamos quantas vezes o método alunoRepository.deleteById foi chamado.
     verify(alunoRepository, times(1)).deleteById(aluno.getId());
   }
-
 }
