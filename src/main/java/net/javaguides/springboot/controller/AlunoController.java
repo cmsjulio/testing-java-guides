@@ -29,6 +29,18 @@ package net.javaguides.springboot.controller;
       $.firstName = "Ramesh"
       $.lastName = "Fadatare"
 
+      --
+
+      @WebMvcTest
+      Carrega apenas o controller anotado e suas dependências,
+      economizando o tempo de carregar a aplicação inteira (Service e Repository).
+
+      O Spring Boot instancia apenas a camada web, em vez da aplicação inteira.
+      Quando há mais de um controlador, pode-se utilizar a anotação da forma: @WebMvcTest(HomeController.class)
+
+      A especificação do teste por componetne torna a aplicação mais rápida.
+
+
  */
 
 public class AlunoController {
