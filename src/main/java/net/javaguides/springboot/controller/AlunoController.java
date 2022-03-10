@@ -58,5 +58,26 @@ package net.javaguides.springboot.controller;
 
  */
 
+import net.javaguides.springboot.model.Aluno;
+import net.javaguides.springboot.service.AlunoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/alunos")
 public class AlunoController {
+
+  private AlunoService alunoService;
+
+  // com o construtor, não precisamos do @Autowired
+  public AlunoController(AlunoService alunoService){
+    this.alunoService = alunoService;
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED) //por padrão, a resposta é 200, pra alterar, anotamos desta forma.
+  public Aluno criarAluno(@RequestBody Aluno aluno){ //@RequestBody usa métodos internos para converter JSON/obj.
+    return alunoService.salvarAluno(aluno);
+  }
+
 }
