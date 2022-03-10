@@ -63,6 +63,8 @@ import net.javaguides.springboot.service.AlunoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/alunos")
 public class AlunoController {
@@ -78,6 +80,11 @@ public class AlunoController {
   @ResponseStatus(HttpStatus.CREATED) //por padrão, a resposta é 200, pra alterar, anotamos desta forma.
   public Aluno criarAluno(@RequestBody Aluno aluno){ //@RequestBody usa métodos internos para converter JSON/obj.
     return alunoService.salvarAluno(aluno);
+  }
+
+  @GetMapping
+  public List<Aluno> listarAlunos() {
+    return alunoService.obterAlunos();
   }
 
 }
