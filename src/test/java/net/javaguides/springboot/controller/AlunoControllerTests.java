@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.javaguides.springboot.model.Aluno;
 import net.javaguides.springboot.service.AlunoService;
 import org.hamcrest.CoreMatchers;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
@@ -32,6 +33,7 @@ public class AlunoControllerTests {
   @Autowired
   private ObjectMapper objectMapper;
 
+  @DisplayName("Controller Unit teste do endpoint criarAluno")
   @Test // pra que o JUnit detecte este método como um caso de teste JUnit.
   public void dadoObjetoAluno_quandoCriarAluno_entaoRetornarAlunoSalvo() throws Exception{ //exceção do object mapper
 
