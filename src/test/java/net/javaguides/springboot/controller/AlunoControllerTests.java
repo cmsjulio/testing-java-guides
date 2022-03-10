@@ -122,4 +122,27 @@ public class AlunoControllerTests {
 
   }
 
+  // Controller Unit teste do endpoint obterAlunoPorId(Long id)  - cenário negativo (id inválido)
+  @DisplayName("Controller Unit teste do endpoint obterAlunoPorId(Long id) - cenário negativo")
+  @Test
+  public void dadoAlunoIdInvalido_quandoObterAlunoPorId_entaoRetornarVazio() throws Exception{
+
+    // DADO: pré-condição ou setup
+    Aluno aluno = Aluno.builder().id(1L).firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+
+    // stubbing
+    given(alunoService.obterAlunoPorId(aluno.getId())).willReturn(Optional.empty());
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(get("http://localhost:8080/api/alunos/{id}", aluno.getId()));
+
+
+    // ENTÃO: verificação das saídas
+    response
+      .andDo(print()) // imprimindo saída
+      .andExpect(status().isNotFound()); // checando status 404 da saída
+
+  }
+
 }
