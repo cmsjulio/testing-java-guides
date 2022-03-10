@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 import static org.mockito.BDDMockito.*;
@@ -93,4 +94,32 @@ public class AlunoControllerTests {
       .andExpect(jsonPath("$.size()", is(listaDeAlunos.size()))); //pra verificar se o size do json de saída $.size é igual ao da saída esperada (listaDeAlunos)
 
   }
+
+  // Controller Unit teste do endpoint obterAlunoPorId(Long id)  - cenário positivo (id válido)
+  @DisplayName("Controller Unit teste do endpoint obterAlunoPorId(Long id) - cenário positivo")
+  @Test
+  public void dadoAlunoId_quandoObterAlunoPorId_entaoRetornarObjetoAluno() throws Exception{
+
+    // DADO: pré-condição ou setup
+    Aluno aluno = Aluno.builder().id(1L).firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+
+    // stubbing - atenção ao Optional.of(aluno)
+    given(alunoService.obterAlunoPorId(aluno.getId())).willReturn(Optional.of(aluno));
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(get("http://localhost:8080/api/alunos/{id}", aluno.getId()));
+
+
+    // ENTÃO: verificação das saídas
+    response
+      .andDo(print()) // imprimindo saída
+      .andExpect(status().isOk()) // checando status 200 da saída
+      .andExpect(jsonPath("$.firstName", is(aluno.getFirstName())))
+      .andExpect(jsonPath("$.lastName", is(aluno.getLastName())))
+      .andExpect(jsonPath("$.email", is(aluno.getEmail())));
+
+
+  }
+
 }
