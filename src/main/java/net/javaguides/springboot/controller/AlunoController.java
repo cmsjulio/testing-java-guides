@@ -96,4 +96,24 @@ public class AlunoController {
       .orElseGet(() -> ResponseEntity.notFound().build()); // se não existir, retornar notFound
   }
 
+  @PutMapping("{id}")
+  public ResponseEntity<Aluno> updateAluno(@PathVariable("id") Long id, @RequestBody Aluno aluno){
+    return alunoService.obterAlunoPorId(id)
+      .map(alunoSalvo -> { //map do Optional, irá entrar aqui se ObjectIsNotNull
+
+        alunoSalvo.setFirstName(aluno.getFirstName());
+        alunoSalvo.setLastName(aluno.getLastName());
+        alunoSalvo.setEmail(aluno.getEmail());
+
+        // atualizando objeto com alunoSalvo alterado.
+        Aluno alunoAtualizado = alunoService.atualizarAluno(alunoSalvo);
+
+        // retornando ResponseEntity com alunoAtualizado e response OK
+        return new ResponseEntity<>(alunoAtualizado, HttpStatus.OK);
+      })
+      .orElseGet(()->ResponseEntity.notFound().build()); // caso ObjectIsNull
+  }
+  // obterAlunoPorId retorna um Optional do tipo Aluno. A classe Optional possui método .map, que pode ser utilizado
+  // para mapear um objeto a outro.
+
 }
