@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -91,6 +92,56 @@ public class AlunoControllerITests {
     // ENTÃO: verificação das saídas
     response.andDo(print()).andExpect(status().isOk()) //pra verificar se o status do response é OK
       .andExpect(jsonPath("$.size()", is(listaDeAlunos.size()))); //pra verificar se o size do json de saída $.size é igual ao da saída esperada (listaDeAlunos)
+
+  }
+
+  // mesmo código do Controller Unit teste, mas: sem stubbin e com persistência.
+  // Controller Integration teste do endpoint obterAlunoPorId(Long id) - cenário positivo (id válido)
+  @DisplayName("Controller Integration teste do endpoint obterAlunoPorId(Long id) - cenário positivo")
+  @Test
+  public void dadoAlunoId_quandoObterAlunoPorId_entaoRetornarObjetoAluno() throws Exception {
+
+    // DADO: pré-condição ou setup
+    Aluno aluno = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+
+    // gravando na base:
+    alunoRepository.save(aluno);
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(get("http://localhost:8080/api/alunos/{id}", aluno.getId()));
+
+
+    // ENTÃO: verificação das saídas
+    response
+      .andDo(print()) // imprimindo saída
+      .andExpect(status().isOk()) // checando status 200 da saída
+      .andExpect(jsonPath("$.firstName", is(aluno.getFirstName())))
+      .andExpect(jsonPath("$.lastName", is(aluno.getLastName())))
+      .andExpect(jsonPath("$.email", is(aluno.getEmail())));
+
+
+  }
+
+  // mesmo caso do Controller Unit teste, mas com armazenamento em base.
+  // Controller Integration teste do endpoint obterAlunoPorId(Long id)  - cenário negativo (id inválido)
+  @DisplayName("Controller Integration teste do endpoint obterAlunoPorId(Long id) - cenário negativo")
+  @Test
+  public void dadoAlunoIdInvalido_quandoObterAlunoPorId_entaoRetornarVazio() throws Exception {
+
+    // DADO: pré-condição ou setup
+    Aluno aluno = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+    alunoRepository.save(aluno);
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(get("http://localhost:8080/api/alunos/{id}", aluno.getId()+1L)); // id de aluno inexistente
+
+
+    // ENTÃO: verificação das saídas
+    response
+      .andDo(print()) // imprimindo saída
+      .andExpect(status().isNotFound()); // checando status 404 da saída
 
   }
 }
