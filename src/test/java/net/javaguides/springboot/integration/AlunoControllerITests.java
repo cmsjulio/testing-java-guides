@@ -20,8 +20,7 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -144,4 +143,58 @@ public class AlunoControllerITests {
       .andExpect(status().isNotFound()); // checando status 404 da saída
 
   }
+
+  // mesmo caso do Controller Unit teste, mas sem stubbing/mock
+  // Controller Integration teste do endpoint updateAluno(Long) - cenário positivo
+  @DisplayName("Controller Integration teste do endpoint updateAluno(Long) - cenário positivo")
+  @Test
+  public void dadoAlunoAtualizado_quandoUpdateAluno_entaoRetornarObjetoAlunoAtualizado() throws Exception { // exception do writeValueAsString
+
+    // DADO: pré-condição ou setup
+    Aluno alunoSalvo = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+    Aluno alunoAtualizado = Aluno.builder().firstName("Cézar").lastName("Mendes").email("jjj@gmail.com").build();
+
+    alunoRepository.save(alunoSalvo);
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(put("http://localhost:8080/api/alunos/{id}", alunoSalvo.getId())
+      .contentType(MediaType.APPLICATION_JSON)  // dizendo que o request type é json
+      .content(objectMapper.writeValueAsString(alunoAtualizado))); // content do request é alunoAtualizado
+
+    // ENTÃO: verificação das saídas
+    response.andDo(print())
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.firstName", is(alunoAtualizado.getFirstName())))
+      .andExpect(jsonPath("$.lastName", is(alunoAtualizado.getLastName())))
+      .andExpect(jsonPath("$.email", is(alunoAtualizado.getEmail())));
+
+  }
+
+  // Controller Integration teste do endpoint updateAluno(Long) - cenário negativo
+  @DisplayName("Controller Integration teste do endpoint updateAluno(Long) - cenário negativo")
+  @Test
+  public void dadoAlunoAtualizado_quandoUpdateAluno_entaoRetornar404() throws Exception { // exception do writeValueAsString
+
+    // DADO: pré-condição ou setup
+    Aluno alunoSalvo = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+    Aluno alunoAtualizado = Aluno.builder().firstName("Cézar").lastName("Mendes").email("jjj@gmail.com").build();
+
+    alunoRepository.save(alunoSalvo);
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(put("http://localhost:8080/api/alunos/{id}", alunoSalvo.getId()+1L)
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(objectMapper.writeValueAsString(alunoAtualizado))); // lança exceção
+
+    // ENTÃO: verificação das saídas
+    response.andDo(print())
+      .andExpect(status().isNotFound());
+
+
+  }
+
+
+
 }
