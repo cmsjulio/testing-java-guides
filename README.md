@@ -34,3 +34,17 @@ MOCK(default): Carrega um web ApplicationContext e disponibiliza um Mock de um a
 RANDOM_PORT: Carrega o WebServerApplicationContext e disponibiliza um ambiente web real. O servidor embutido é iniciado em uma porta aleatória. **Esta é a opção que deve ser utilizada em testes de integração.**<br>
 DEFINED_PORT: Carrega o WebServerApplicationContext e disponibiliza um ambiente web real. <br>
 NONE: Carrega o ApplicationContext por meio do SpringApplication, mas não disponibiliza ambiente web algum.
+
+### Teste de Integração da camada Repository
+Por que testar a camada repository novamente?
+
+A anotação *@DataJpaTest*, do Unit teste que já realizamos, utiliza uma base H2 em memória. 
+Para testarmos nosso código em condições de produção, utilizamos o teste de integração da camada repository.
+
+Nosso interesse é saber se nosso código está funcional em condições de produção -- acesso à base real.
+
+Fazemos isso desabilitando o suporte da base em memória e habilitando o suporte para base de produção (no nosso caso, MySQL).
+
+Assim, em vez de aportarmos nossos testes para a base H2 em memória, apontamos para a base real das condições de produção.
+
+
