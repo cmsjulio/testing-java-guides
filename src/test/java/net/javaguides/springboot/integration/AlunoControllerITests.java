@@ -20,6 +20,7 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -191,6 +192,29 @@ public class AlunoControllerITests {
     // ENTÃO: verificação das saídas
     response.andDo(print())
       .andExpect(status().isNotFound());
+
+
+  }
+
+  // mesmo que o Controller Unit teste, mas sem mocking ou stubbing
+  // Controller Integration teste do endpoint deletarAluno(Long)
+  @DisplayName("Controller Integration teste do endpoint deletarAluno(Long)")
+  @Test
+  public void dadoObjetoAluno_quandoDeletarAluno_entaoRetornar200() throws Exception { //Exception do .perform
+
+    // DADO: pré-condição ou setup
+    Aluno aluno = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+
+    alunoRepository.save(aluno);
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response =  mockMvc.perform(delete("http://localhost:8080/api/alunos/{id}", aluno.getId()));
+
+
+    // ENTÃO: verificação das saídas
+    response.andDo(print())
+      .andExpect(status().isOk());
 
 
   }
