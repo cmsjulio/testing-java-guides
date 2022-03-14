@@ -158,7 +158,7 @@ public class AlunoControllerTests {
     //  precisaremos usar o Mockito para fazer o stubbing destes dois métodos
 
     given(alunoService.obterAlunoPorId(alunoSalvo.getId())).willReturn(Optional.of(alunoSalvo));
-    given(alunoService.atualizarAluno(any(Aluno.class))).willAnswer((invocation)-> invocation.getArgument(0)); // retornando o que é passado no argumento de posição 0
+    given(alunoService.atualizarAluno(any(Aluno.class))).willAnswer((invocation) -> invocation.getArgument(0)); // retornando o que é passado no argumento de posição 0
 
     // QUANDO: ação ou comportamento a ser testado
     ResultActions response = mockMvc.perform(put("http://localhost:8080/api/alunos/{id}", alunoSalvo.getId())
@@ -188,7 +188,7 @@ public class AlunoControllerTests {
     //  precisaremos usar o Mockito para fazer o stubbing destes dois métodos
 
     given(alunoService.obterAlunoPorId(alunoSalvo.getId())).willReturn(Optional.empty()); // no controller, se o service.obterAlunoPorid retorna empty, o notFound é emitido.
-    given(alunoService.atualizarAluno(any(Aluno.class))).willAnswer((invocation)-> invocation.getArgument(0)); // retornando o que é passado no argumento de posição 0
+    given(alunoService.atualizarAluno(any(Aluno.class))).willAnswer((invocation) -> invocation.getArgument(0)); // retornando o que é passado no argumento de posição 0
 
     // QUANDO: ação ou comportamento a ser testado
     ResultActions response = mockMvc.perform(put("http://localhost:8080/api/alunos/{id}", alunoSalvo.getId())
@@ -198,6 +198,29 @@ public class AlunoControllerTests {
     // ENTÃO: verificação das saídas
     response.andDo(print())
       .andExpect(status().isNotFound());
+
+
+  }
+
+  // Controller Unit teste do endpoint deletarAluno(Long)
+  @DisplayName("Controller Unit teste do endpoint deletarAluno(Long)")
+  @Test
+  public void dadoObjetoAluno_quandoDeletarAluno_entaoRetornar200() throws Exception { //Exception do .perform
+
+    // DADO: pré-condição ou setup
+    Aluno aluno = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").id(1L).build();
+
+    //    deletarAluno retorna void
+    willDoNothing().given(alunoService).deletarAluno(aluno.getId());
+
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response =  mockMvc.perform(delete("http://localhost:8080/api/alunos/{id}", aluno.getId()));
+
+
+    // ENTÃO: verificação das saídas
+    response.andDo(print())
+      .andExpect(status().isOk());
 
 
   }
