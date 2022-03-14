@@ -175,4 +175,31 @@ public class AlunoControllerTests {
 
   }
 
+  // Controller Unit teste do endpoint updateAluno(Long) - cenário negativo
+  @DisplayName("Controller Unit teste do endpoint updateAluno(Long) - cenário negativo")
+  @Test
+  public void dadoAlunoAtualizado_quandoUpdateAluno_entaoRetornar404() throws Exception { // exception do writeValueAsString
+
+    // DADO: pré-condição ou setup
+    Aluno alunoSalvo = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").id(1L).build();
+    Aluno alunoAtualizado = Aluno.builder().firstName("Cézar").lastName("Mendes").email("jjj@gmail.com").build();
+
+    //  o alunoController.updateAluno chama o alunoService.obterAlunoPorId e alunoService.atualizarAluno
+    //  precisaremos usar o Mockito para fazer o stubbing destes dois métodos
+
+    given(alunoService.obterAlunoPorId(alunoSalvo.getId())).willReturn(Optional.empty()); // no controller, se o service.obterAlunoPorid retorna empty, o notFound é emitido.
+    given(alunoService.atualizarAluno(any(Aluno.class))).willAnswer((invocation)-> invocation.getArgument(0)); // retornando o que é passado no argumento de posição 0
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(put("http://localhost:8080/api/alunos/{id}", alunoSalvo.getId())
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(objectMapper.writeValueAsString(alunoAtualizado))); // lança exceção
+
+    // ENTÃO: verificação das saídas
+    response.andDo(print())
+      .andExpect(status().isNotFound());
+
+
+  }
+
 }
