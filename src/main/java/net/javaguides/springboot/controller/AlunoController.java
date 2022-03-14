@@ -116,4 +116,10 @@ public class AlunoController {
   // obterAlunoPorId retorna um Optional do tipo Aluno. A classe Optional possui método .map, que pode ser utilizado
   // para mapear um objeto a outro.
 
+  @DeleteMapping("{id}")
+  public ResponseEntity<String> deletarAluno(@PathVariable("id") Long id){
+    alunoService.deletarAluno(id);
+    return new ResponseEntity<String>("Aluno deletado com sucesso.", HttpStatus.OK);
+  }
+
 }
