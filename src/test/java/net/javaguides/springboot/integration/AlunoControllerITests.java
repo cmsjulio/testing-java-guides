@@ -13,9 +13,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -58,6 +62,35 @@ public class AlunoControllerITests {
       .andExpect(status().isCreated()) //chacando se HTTP status é o CREATED
       .andExpect(jsonPath("$.firstName", is(aluno.getFirstName()))) //checando se saída do json bate com aluno.firstname
       .andExpect(jsonPath("$.lastName", is(aluno.getLastName()))).andExpect(jsonPath("$.email", is(aluno.getEmail())));
+
+  }
+
+  // utilizamos o mesmo código do Controller Unit teste, com o stubbing removido.
+  // Controller Integration teste do endpoint listarAlunos
+  @DisplayName("Controller Integration teste do endpoint listarAlunos")
+  @Test
+  public void dadoObjetosAluno_quandoListarAlunos_entaoRetornarListaDeAlunos() throws Exception {
+
+    // DADO: pré-condição ou setup
+    // inserindo lista de alunos
+    Aluno aluno1 = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
+    Aluno aluno2 = Aluno.builder().firstName("Juliana").lastName("Silva").email("js@gmail.com").build();
+
+    List<Aluno> listaDeAlunos = new ArrayList<>();
+    listaDeAlunos.add(aluno1);
+    listaDeAlunos.add(aluno2);
+
+    // precisamos salvar em persitência o que antes era mocado.
+    alunoRepository.saveAll(listaDeAlunos);
+
+    // QUANDO: ação ou comportamento a ser testado
+    // usando o mockMvc para chamar o endpoint
+    ResultActions response = mockMvc.perform(get("http://localhost:8080/api/alunos"));
+
+
+    // ENTÃO: verificação das saídas
+    response.andDo(print()).andExpect(status().isOk()) //pra verificar se o status do response é OK
+      .andExpect(jsonPath("$.size()", is(listaDeAlunos.size()))); //pra verificar se o size do json de saída $.size é igual ao da saída esperada (listaDeAlunos)
 
   }
 }
