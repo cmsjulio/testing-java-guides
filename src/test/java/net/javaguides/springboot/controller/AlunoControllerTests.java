@@ -98,7 +98,7 @@ public class AlunoControllerTests {
   // Controller Unit teste do endpoint obterAlunoPorId(Long id)  - cenário positivo (id válido)
   @DisplayName("Controller Unit teste do endpoint obterAlunoPorId(Long id) - cenário positivo")
   @Test
-  public void dadoAlunoId_quandoObterAlunoPorId_entaoRetornarObjetoAluno() throws Exception{
+  public void dadoAlunoId_quandoObterAlunoPorId_entaoRetornarObjetoAluno() throws Exception {
 
     // DADO: pré-condição ou setup
     Aluno aluno = Aluno.builder().id(1L).firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
@@ -125,7 +125,7 @@ public class AlunoControllerTests {
   // Controller Unit teste do endpoint obterAlunoPorId(Long id)  - cenário negativo (id inválido)
   @DisplayName("Controller Unit teste do endpoint obterAlunoPorId(Long id) - cenário negativo")
   @Test
-  public void dadoAlunoIdInvalido_quandoObterAlunoPorId_entaoRetornarVazio() throws Exception{
+  public void dadoAlunoIdInvalido_quandoObterAlunoPorId_entaoRetornarVazio() throws Exception {
 
     // DADO: pré-condição ou setup
     Aluno aluno = Aluno.builder().id(1L).firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
@@ -142,6 +142,36 @@ public class AlunoControllerTests {
     response
       .andDo(print()) // imprimindo saída
       .andExpect(status().isNotFound()); // checando status 404 da saída
+
+  }
+
+  // Controller Unit teste do endpoint updateAluno(Long) - cenário positivo
+  @DisplayName("Controller Unit teste do endpoint updateAluno(Long) - cenário positivo")
+  @Test
+  public void dadoAlunoAtualizado_quandoUpdateAluno_entaoRetornarObjetoAlunoAtualizado() throws Exception { // exception do writeValueAsString
+
+    // DADO: pré-condição ou setup
+    Aluno alunoSalvo = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").id(1L).build();
+    Aluno alunoAtualizado = Aluno.builder().firstName("Cézar").lastName("Mendes").email("jjj@gmail.com").build();
+
+    //  o alunoController.updateAluno chama o alunoService.obterAlunoPorId e alunoService.atualizarAluno
+    //  precisaremos usar o Mockito para fazer o stubbing destes dois métodos
+
+    given(alunoService.obterAlunoPorId(alunoSalvo.getId())).willReturn(Optional.of(alunoSalvo));
+    given(alunoService.atualizarAluno(any(Aluno.class))).willAnswer((invocation)-> invocation.getArgument(0)); // retornando o que é passado no argumento de posição 0
+
+    // QUANDO: ação ou comportamento a ser testado
+    ResultActions response = mockMvc.perform(put("http://localhost:8080/api/alunos/{id}", alunoSalvo.getId())
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(objectMapper.writeValueAsString(alunoAtualizado))); // lança exceção
+
+    // ENTÃO: verificação das saídas
+    response.andDo(print())
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.firstName", is(alunoAtualizado.getFirstName())))
+      .andExpect(jsonPath("$.lastName", is(alunoAtualizado.getLastName())))
+      .andExpect(jsonPath("$.email", is(alunoAtualizado.getEmail())));
+
 
   }
 
