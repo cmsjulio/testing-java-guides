@@ -48,3 +48,11 @@ Fazemos isso desabilitando o suporte da base em memória e habilitando o suporte
 Assim, em vez de aportarmos nossos testes para a base H2 em memória, apontamos para a base real das condições de produção.
 
 
+### Teste de Integração com Testcontainers
+Um problema comum com os testes de integração é a questão da configuração das dependências. Ex.: precisa-se instalar a versão específica do MySQL etc.
+
+Testcontainers são uma biblioteca Java com suporte para testes JUnit, com bancos de dados embutidos, Selenium web browsers, e tudo mais que se pode rodar num container Docker.
+
+A biblioteca permite que realizemos testes sem a necessidade de componentes previamente instalados. 
+
+Com os Testcontainers, sempre iniciamos uma base de dados do zero, permitindo que nossos testes rodem em qualquer máquina.
