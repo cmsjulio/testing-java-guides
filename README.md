@@ -56,3 +56,8 @@ Testcontainers são uma biblioteca Java com suporte para testes JUnit, com banco
 A biblioteca permite que realizemos testes sem a necessidade de componentes previamente instalados. 
 
 Com os Testcontainers, sempre iniciamos uma base de dados do zero, permitindo que nossos testes rodem em qualquer máquina.
+
+Com os Testcontainers, eliminamos a necessidade de instalações locais, conforme imagem a seguir:
+
+<img src="img_3.png">
+
