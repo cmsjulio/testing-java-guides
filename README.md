@@ -8,7 +8,7 @@ Os Unit testes são utilizados para testar as camadas uma a uma, o Integration T
 
 A anotação utilizada em testes de integração é a *@SpringBootTest*.
 
-<img src="img.png">
+<img src="images/img.png">
 
 Os testes são utilizados conforme o FEATURE que se deseja testar. Cada feature envolvendo a integração de componentes múltimos: E.g.: <br> 
 **Gerenciamento de Aluno**: AlunoRepository, AlunoService, AlunoController. <br>
@@ -24,7 +24,7 @@ A anotação carrega todos os Beans de todas as camadas da aplicação, permitin
 
 Por trás dos panos, o *@SpringBootTest* inicia o servidor, cria o ambiente Web e habilita a anotação *@Test* a realizar os testes de integração.
 
-<img src="img_1.png">
+<img src="images/img_1.png">
 
 Por padrão, a anotação *@SpringBootTest* **não inicia o servidor**. Precisamos configurar o webEnvironment para que seja determinado em que contexto o teste será executado.
 
@@ -59,5 +59,5 @@ Com os Testcontainers, sempre iniciamos uma base de dados do zero, permitindo qu
 
 Com os Testcontainers, eliminamos a necessidade de instalações locais, conforme imagem a seguir:
 
-<img src="img_3.png">
+<img src="images/img_3.png">
 
