@@ -40,11 +40,6 @@ public class AlunoRepositoryIT {
   public void dadoObjetoAluno_quandoSalvar_entaoRetornarAlunoSalvo() {
 
     // dado: pré-condição ou setup
-//    Aluno aluno = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Silva")
-//      .email("cms.julio1@gmail.com")
-//      .build();
 
     // quando: ação ou comportamento a ser testado
     Aluno alunoSalvo = alunoRepository.save(aluno);
@@ -91,12 +86,6 @@ public class AlunoRepositoryIT {
   public void dadoObjetoAluno_quandoFindById_entaoRetornarAlunoDoBancoDeDados() {
 
     // dado: pré-condição ou setup
-//    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Silva")
-//      .email("cms.julio1@gmail.com")
-//      .build();
-
     alunoRepository.save(aluno);
 
     // quando: ação ou comportamento a ser testado
@@ -114,11 +103,6 @@ public class AlunoRepositoryIT {
   public void dadoEmailDoObjetoAluno_quandoFindByEmail_entaoRetornarObjetoAluno() {
 
     // dado: pré-condição ou setup
-//    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Mendes")
-//      .email("cms.julio1@gmail.com")
-//      .build();
     alunoRepository.save(aluno);
 
     // quando: ação ou comportamento a ser testado
@@ -136,10 +120,6 @@ public class AlunoRepositoryIT {
 
     // dado: pré-condição ou setup
 //    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Mendes")
-//      .email("cms.julio1@gmail.com")
-//      .build();
     alunoRepository.save(aluno);
 
     // quando: ação ou comportamento a ser testado
@@ -160,11 +140,6 @@ public class AlunoRepositoryIT {
   public void dadoObjetoAluno_quandoDeletarAluno_entaoRemoverAluno() {
 
     // dado: pré-condição ou setup
-//    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Mendes")
-//      .email("cms.julio1@gmail.com")
-//      .build();
     alunoRepository.save(aluno);
 
     // quando: ação ou comportamento a ser testado
@@ -183,10 +158,6 @@ public class AlunoRepositoryIT {
 
     // dado: pré-condição ou setup
 //    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Mendes")
-//      .email("cms.julio1@gmail.com")
-//      .build();
     alunoRepository.save(aluno);
 
     String firstName = "Júlio";
@@ -207,11 +178,6 @@ public class AlunoRepositoryIT {
   public void dadoFirstNameAndLastName_quandoFindByJPQLNamedParams_entaoRetornarObjetoAluno() {
 
     // dado: pré-condição ou setup
-//    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Mendes")
-//      .email("cms.julio1@gmail.com")
-//      .build();
     alunoRepository.save(aluno);
 
     String firstName = "Júlio";
@@ -231,11 +197,6 @@ public class AlunoRepositoryIT {
   public void dadoFirstNameAndLastName_quandoFindByNativeSQL_entaoRetornaObjetoAluno() {
 
     // dado: pré-condição ou setup
-//    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Mendes")
-//      .email("cms.julio1@gmail.com")
-//      .build();
     alunoRepository.save(aluno);
 
     // quando: ação ou comportamento a ser testado
@@ -252,11 +213,6 @@ public class AlunoRepositoryIT {
   public void dadoFirstNameAndLastName_quandoFindByNativeSQLNamedParams_entaoRetornaObjetoAluno() {
 
     // dado: pré-condição ou setup
-//    Aluno aluno1 = Aluno.builder()
-//      .firstName("Júlio")
-//      .lastName("Mendes")
-//      .email("cms.julio1@gmail.com")
-//      .build();
     alunoRepository.save(aluno);
 
     // quando: ação ou comportamento a ser testado
