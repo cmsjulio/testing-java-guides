@@ -13,7 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 import java.util.Optional;
 
-@DataJpaTest //anotação para teste de repository
+@DataJpaTest //anotação para teste de repository - precisa alterar configurações do applications.properties
 public class AlunoRepositoryTests {
 
   @Autowired
