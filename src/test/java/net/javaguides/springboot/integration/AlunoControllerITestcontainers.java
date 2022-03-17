@@ -58,29 +58,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
    Para linkar o @Container com o application context, utilizamos a anotação @DynamicPropertySource;
    fazendo tal link, outras classes conseguem conectar ao banco de dados do @Container.
+
+
+   Para evitar termos que iniciar um novo Testcontainer para cada classe a ser testada, podemos criar uma classe abstrata.
+   Movemos, então, o código de configuração do container para a nova classe abstrata criada.
+   Existe documentação para isso, e o nome deste método é Sigleton Containers.
+
  */
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) //para testes, necessário definir webEnv como RANDOM
 @AutoConfigureMockMvc //utilizamos o MockMvc para chamar as API Rest
-@Testcontainers // anotação (extensão) que integra o JUnit com o testcontainer. (clicar na anotação p ver que se trata de uma extensão).
-public class AlunoControllerITestcontainers {
-
-  // para uma base MySQL, precisamos criar um objeto container MySQL
-  // precisamos defini-lo como estático para que possamos compartilhá-lo entre os diversos métodos.
-  // precisamos, também, especificar a imagem Docker que será utilizada no construtor do MySQLContainer; usamos "mysql:latest"
-  // a anotação @Container faz com que o @Testcontainers cuide do ciclo de vida da anotação
-  @Container
-  private static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
-    .withDatabaseName("TestingName");
-    // Essas configurações precisam bater com as do application.properties, caso contrário, o teste não funciona. <-funcionou sem estar igual.
-    // Na verdade: às vezes funciona, às vezes não. E eu nao sei bem a causa. Talvez tenha a ver com o connection can be kept alive for 3 MINUTES.
-
-  @DynamicPropertySource
-  public static void dynamicPropertySource(DynamicPropertyRegistry registry){
-    registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
-    registry.add("spring.datasource.username", mySQLContainer::getUsername);
-    registry.add("spring.datasource.password", mySQLContainer::getPassword);
-  }
+// @Testcontainers // anotação (extensão) que integra o JUnit com o testcontainer. (clicar na anotação p ver que se trata de uma extensão).
+public class AlunoControllerITestcontainers extends AbstractionBaseTest {
 
   @Autowired
   private MockMvc mockMvc; //para realizar chamadas HTTP utilizando o método perform()
@@ -102,10 +91,10 @@ public class AlunoControllerITestcontainers {
   @Test // pra que o JUnit detecte este método como um caso de teste JUnit.
   public void dadoObjetoAluno_quandoCriarAluno_entaoRetornarAlunoSalvo() throws Exception { //exceção do mockMvc.perform
 
-    System.out.println("Nome DB: " + mySQLContainer.getDatabaseName());
-    System.out.println("User: " + mySQLContainer.getUsername());
-    System.out.println("Password: " + mySQLContainer.getPassword());
-    System.out.println("JDBC url: " + mySQLContainer.getJdbcUrl());
+    System.out.println("Nome DB: " + MY_SQL_CONTAINER.getDatabaseName());
+    System.out.println("User: " + MY_SQL_CONTAINER.getUsername());
+    System.out.println("Password: " + MY_SQL_CONTAINER.getPassword());
+    System.out.println("JDBC url: " + MY_SQL_CONTAINER.getJdbcUrl());
 
     // DADO - pré-condição ou setup
     Aluno aluno = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
