@@ -84,17 +84,18 @@ public class AlunoControllerITestcontainers extends AbstractionBaseTest {
   void setup (){
     alunoRepository.deleteAll();
     // limpando a base de dados antes de todos os testes a serem executados.
+
+    System.out.println("Username: " + MY_SQL_CONTAINER.getUsername());
+    System.out.println("Password: " + MY_SQL_CONTAINER.getPassword());
+    System.out.println("JDBC url: " + MY_SQL_CONTAINER.getJdbcUrl());
+    System.out.println("Database: " + MY_SQL_CONTAINER.getDatabaseName());
+
   }
 
   // Copiamos o mesmo código do Controller Unit, mas sem o stubbing dos métodos do Service.
   @DisplayName("Controller Integration teste do endpoint criarAluno(Aluno)")
   @Test // pra que o JUnit detecte este método como um caso de teste JUnit.
   public void dadoObjetoAluno_quandoCriarAluno_entaoRetornarAlunoSalvo() throws Exception { //exceção do mockMvc.perform
-
-    System.out.println("Nome DB: " + MY_SQL_CONTAINER.getDatabaseName());
-    System.out.println("User: " + MY_SQL_CONTAINER.getUsername());
-    System.out.println("Password: " + MY_SQL_CONTAINER.getPassword());
-    System.out.println("JDBC url: " + MY_SQL_CONTAINER.getJdbcUrl());
 
     // DADO - pré-condição ou setup
     Aluno aluno = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();

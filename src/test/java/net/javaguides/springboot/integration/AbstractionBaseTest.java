@@ -7,7 +7,7 @@ import org.testcontainers.junit.jupiter.Container;
 
 public abstract class AbstractionBaseTest {
 
-  static final MySQLContainer MY_SQL_CONTAINER;
+  protected static final MySQLContainer MY_SQL_CONTAINER;
 
   // utilizando o bloco estático para criar/iniciar o objeto
   static {
