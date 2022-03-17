@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.MySQLContainer;
@@ -53,6 +55,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     asserTrue(postgresSQLContainer.isRunning());
   }
 }
+
+   Para linkar o @Container com o application context, utilizamos a anotação @DynamicPropertySource;
+   fazendo tal link, outras classes conseguem conectar ao banco de dados do @Container.
  */
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) //para testes, necessário definir webEnv como RANDOM
@@ -66,10 +71,16 @@ public class AlunoControllerITestcontainers {
   // a anotação @Container faz com que o @Testcontainers cuide do ciclo de vida da anotação
   @Container
   private static final MySQLContainer mySQLContainer = new MySQLContainer("mysql:latest")
-    .withUsername("root")
-    .withPassword("root")
-    .withDatabaseName("ams");
-    // Essas configurações precisam bater com as do application.properties, caso contrário, o teste não funciona.
+    .withDatabaseName("TestingName");
+    // Essas configurações precisam bater com as do application.properties, caso contrário, o teste não funciona. <-funcionou sem estar igual.
+    // Na verdade: às vezes funciona, às vezes não. E eu nao sei bem a causa. Talvez tenha a ver com o connection can be kept alive for 3 MINUTES.
+
+  @DynamicPropertySource
+  public static void dynamicPropertySource(DynamicPropertyRegistry registry){
+    registry.add("spring.datasource.url", mySQLContainer::getJdbcUrl);
+    registry.add("spring.datasource.username", mySQLContainer::getUsername);
+    registry.add("spring.datasource.password", mySQLContainer::getPassword);
+  }
 
   @Autowired
   private MockMvc mockMvc; //para realizar chamadas HTTP utilizando o método perform()
