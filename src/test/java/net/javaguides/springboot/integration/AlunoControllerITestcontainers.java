@@ -69,6 +69,7 @@ public class AlunoControllerITestcontainers {
     .withUsername("root")
     .withPassword("root")
     .withDatabaseName("ams");
+    // Essas configurações precisam bater com as do application.properties, caso contrário, o teste não funciona.
 
   @Autowired
   private MockMvc mockMvc; //para realizar chamadas HTTP utilizando o método perform()
@@ -90,10 +91,10 @@ public class AlunoControllerITestcontainers {
   @Test // pra que o JUnit detecte este método como um caso de teste JUnit.
   public void dadoObjetoAluno_quandoCriarAluno_entaoRetornarAlunoSalvo() throws Exception { //exceção do mockMvc.perform
 
-    System.out.println(mySQLContainer.getDatabaseName());
-    System.out.println(mySQLContainer.getUsername());
-    System.out.println(mySQLContainer.getPassword());
-
+    System.out.println("Nome DB: " + mySQLContainer.getDatabaseName());
+    System.out.println("User: " + mySQLContainer.getUsername());
+    System.out.println("Password: " + mySQLContainer.getPassword());
+    System.out.println("JDBC url: " + mySQLContainer.getJdbcUrl());
 
     // DADO - pré-condição ou setup
     Aluno aluno = Aluno.builder().firstName("Julio").lastName("Silva").email("cms.julio1@gmail.com").build();
