@@ -3,9 +3,8 @@ package net.javaguides.springboot.integration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
 
-public abstract class AbstractionBaseTest {
+public abstract class AbstractContainerBaseTest {
 
   protected static final MySQLContainer MY_SQL_CONTAINER;
 

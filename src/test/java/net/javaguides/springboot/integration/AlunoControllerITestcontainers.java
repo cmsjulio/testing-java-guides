@@ -10,13 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +64,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) //para testes, necessário definir webEnv como RANDOM
 @AutoConfigureMockMvc //utilizamos o MockMvc para chamar as API Rest
 // @Testcontainers // anotação (extensão) que integra o JUnit com o testcontainer. (clicar na anotação p ver que se trata de uma extensão).
-public class AlunoControllerITestcontainers extends AbstractionBaseTest {
+public class AlunoControllerITestcontainers extends AbstractContainerBaseTest {
 
   @Autowired
   private MockMvc mockMvc; //para realizar chamadas HTTP utilizando o método perform()

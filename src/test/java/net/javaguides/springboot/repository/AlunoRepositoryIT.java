@@ -1,6 +1,6 @@
 package net.javaguides.springboot.repository;
 
-import net.javaguides.springboot.integration.AbstractionBaseTest;
+import net.javaguides.springboot.integration.AbstractContainerBaseTest;
 import net.javaguides.springboot.model.Aluno;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest // utiliza, por padrão, base H2 em memória; para o IT, precisamos desabilitar
 // para apontarmos para a base real, de produção, utilizamos a @AutoConfigureTestDatabase, conforme abaixo:
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class AlunoRepositoryIT extends AbstractionBaseTest { // com esse extends, utilizamos o singleton container.
+public class AlunoRepositoryIT extends AbstractContainerBaseTest { // com esse extends, utilizamos o singleton container.
 
   @Autowired
   private AlunoRepository alunoRepository;
