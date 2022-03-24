@@ -61,3 +61,62 @@ Com os Testcontainers, eliminamos a necessidade de instalações locais, conform
 
 <img src="images/img_3.png">
 
+## @ActiveProfiles e application-perfil.properties
+
+O AlunoRepositoryTest precisa rodar em base H2, sem dialeto
+configurado. Para isso, precisamos criar um novo perfil
+de propriedades:
+
+![img.png](images/img_4.png)
+
+* Em application.properties, indicamos o perfil que está sendo utilizado:
+
+```properties
+spring.profiles.active=main
+```
+
+Aqui podemos alterar de main para repositoryTest, conforme propriedades que desejamos utilizar.
+
+* Em application-main.properties, indicamos as configurações do perfil main:
+
+```properties
+spring.jpa.show-sql=true
+
+spring.datasource.url=jdbc:mysql://localhost:3306/ams?allowPublicKeyRetrieval=true&useSSL=false
+#  ams=alunoManagementeSystem
+spring.datasource.username=root
+spring.datasource.password=root
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
+
+spring.jpa.hibernate.ddl-auto=create-drop
+
+```
+
+Esta configuração utiliza o dialeto MySQL para enviar comandos para a base de dados com a sintaxe do MySQL.
+
+No caso de estarmos utilizando uma base em memória H2, não podemos adotar o dialeto MySQL --
+dialeto este que é adotado e utilizado nos testes de integração.
+
+Os testes unitários de repositório da classe AlunoRepositoryTests utilizam a anotação @DataJPATest, que utiliza uma base em memória H2.
+
+Para evitar este conflito entre as configurações de propriedades, criamos dois perfis, ativando cada perfil conforme for pertinente.
+
+* Em application-repositoryTest.properties, inserimos as configurações com as
+quais os testes de AlunoRepositoryTests irão rodar -- sem dialeto MySQL:
+
+```properties
+spring.jpa.show-sql=true
+```
+
+### Alternando entre perfis -- @ActiveProfile
+
+Para alternar entre um perfil e outro, podemos editar o application.properties, ou, 
+ativar o perfil na classe de teste em questão com a anotação @ActiveProfile.
+
+![img.png](img.png)
+
+Quando inserimos tal anotação, o perfil utilizado na classe em questão será o perfil
+apontado -- mesmo quando o perfil adotado em application.properties seja outro.
+
+Conforme [Baeldung](https://www.baeldung.com/spring-profiles).
