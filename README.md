@@ -120,3 +120,5 @@ Quando inserimos tal anotação, o perfil utilizado na classe em questão será 
 apontado -- mesmo quando o perfil adotado em application.properties seja outro.
 
 Conforme [Baeldung](https://www.baeldung.com/spring-profiles).
+
+------
